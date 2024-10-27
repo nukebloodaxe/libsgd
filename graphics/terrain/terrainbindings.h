@@ -26,6 +26,8 @@ struct TerrainBindings : GraphicsResource {
 	Property<MaterialPtr> material;
 	Property<bool> shadowsEnabled;
 
+	Array<float,4> getLocalQuadVertexHeights(float x, float z) const;
+
 	float getLocalHeight(float x,float z) const;
 
 	void render(RenderQueue* rq) const;

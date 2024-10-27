@@ -146,6 +146,8 @@ void TerrainBindings::onValidate() const {
 
 						static constexpr uint32_t tris[]{
 							// clang-format off
+//							0,3,1,  3,4,1,  1,4,5,  1,5,2,
+//							3,6,7,  3,7,4,  4,7,5,  7,8,5,
 							0,9,1,  1,9,4,  4,9,3,  3,9,0,
 							1,10,2, 2,10,5, 5,10,4, 4,10,1,
 							3,11,4, 4,11,7, 7,11,6, 6,11,3,
@@ -187,49 +189,46 @@ void TerrainBindings::onValidate() const {
 	m_indexCount = indices.size();
 }
 
-float TerrainBindings::getLocalHeight(float x, float z) const {
-	float hsize = (float)size() / 2;
-	if (x < -hsize || x >= hsize - 1 || z < -hsize || z >= hsize - 1) { //
-		return 0;														// Off the map
-	}
-	x += hsize;
-	z += hsize;
+Array<float, 4> TerrainBindings::getLocalQuadVertexHeights(float x, float z) const {
+
 	auto fx = std::floor(x);
 	auto fz = std::floor(z);
-	auto ix = (uint32_t)fx;
-	auto iz = (uint32_t)fz;
 
+	float hsize = (float)size() / 2;
+	if (fx < -hsize || fx >= hsize - 1 || fz < -hsize || fz >= hsize - 1) {
+		return {}; // Off the map
+	}
+	auto ix = (uint32_t)(fx + hsize);
+	auto iz = (uint32_t)(fz + hsize);
 	auto data = heightTexture()->data();
 
-	float y0, y1, y2, y3;
-
 	switch (data->format()) {
-	case TextureFormat::rgba16f: {
-		auto p0 = (float16*)(data->data() + iz * data->pitch());
-		auto p1 = (float16*)(data->data() + (iz + 1u) * data->pitch());
-		y0 = p0[ix];
-		y1 = p0[ix + 1];
-		y2 = p1[ix];
-		y3 = p1[ix + 1];
-		break;
-	}
 	case TextureFormat::r32f: {
 		auto p0 = (float*)(data->data() + iz * data->pitch());
 		auto p1 = (float*)(data->data() + (iz + 1u) * data->pitch());
-		y0 = p0[ix];
-		y1 = p0[ix + 1];
-		y2 = p1[ix];
-		y3 = p1[ix + 1];
-		break;
+		return {p0[ix], p0[ix + 1], p1[ix], p1[ix + 1]};
+	}
+	case TextureFormat::r16f: {
+		auto p0 = (float16*)(data->data() + iz * data->pitch());
+		auto p1 = (float16*)(data->data() + (iz + 1u) * data->pitch());
+		return {(float)p0[ix], (float)p0[ix + 1], (float)p1[ix], (float)p1[ix + 1]};
 	}
 	default:
 		SGD_ERROR("TODO");
 	}
+}
 
-	float y4 = (y1-y0) * (x-fx) + y0;
-	float y5 = (y3-y2) * (x-fx) + y2;
+float TerrainBindings::getLocalHeight(float x, float z) const {
 
-	float y = (y5-y4)*(z-fz)+y4;
+	auto ys = getLocalQuadVertexHeights(x,z);
+
+	auto tx = x - std::floor(x);
+	auto tz = z - std::floor(z);
+
+	float y4 = (ys[1] - ys[0]) * tx + ys[0];
+	float y5 = (ys[3] - ys[2]) * tx + ys[2];
+
+	float y = (y5 - y4) * tz + y4;
 
 	return y;
 }

@@ -23,6 +23,7 @@
 #include "physics/meshcolliderdata.h"
 #include "physics/planecollider.h"
 #include "physics/spherecollider.h"
+#include "physics/terraincollider.h"
 
 #include "plane/planeentity.h"
 
