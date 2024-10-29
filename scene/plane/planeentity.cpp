@@ -8,6 +8,10 @@ namespace sgd {
 PlaneEntity::PlaneEntity() :m_bindings(new PlaneBindings()){
 }
 
+PlaneEntity::PlaneEntity(Material* material) :m_bindings(new PlaneBindings()){
+	m_bindings->material = material;
+}
+
 PlaneEntity::PlaneEntity(CPlaneEntity* that) :m_bindings(that->m_bindings){
 }
 

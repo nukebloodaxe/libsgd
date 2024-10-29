@@ -7,6 +7,7 @@ void entry() {
 	float sz = 100;
 
 	{
+//		MaterialPtr material = loadPBRMaterial(Path("sgd://misc/brownish-grass.jpg")).result();
 		MaterialPtr material = loadPBRMaterial(Path("sgd://misc/brownish-grass.jpg")).result();
 		MeshPtr mesh = createBoxMesh({{-sz, -1, -sz}, {sz, 0, sz}}, material);
 		transformTexCoords(mesh, {sz, sz}, {0, 0});

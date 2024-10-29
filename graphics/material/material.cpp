@@ -28,7 +28,7 @@ MaterialDescriptor::MaterialDescriptor(String typeName,								   //
 	  uniformsSize(uniformsSize),				//
 	  uniformDescs(std::move(uniformDescs)),	//
 	  textureDescs(std::move(textureDescs)), mainTexture(mainTexture) {
-	materialDescs().insert(std::make_pair(typeName, this));
+	materialDescs().insert(std::make_pair(this->typeName, this));
 }
 
 CMaterialDescriptor* MaterialDescriptor::forTypeName(CString typeName) {
@@ -50,8 +50,8 @@ Material::Material(CMaterialDescriptor* desc) : m_desc(desc),
 
 	m_bindGroup->setBuffer(0, m_uniformBuffer);
 
-	for (auto& kv : m_desc->textureDescs) {
-		m_bindGroup->setTexture(kv.second.binding, kv.second.defValue);
+	for (auto& [id, tdesc] : m_desc->textureDescs) {
+		m_bindGroup->setTexture(tdesc.binding, rgbaTexture(tdesc.defRGBAColor, tdesc.defType));
 	}
 	blendMode.changed.connect(this, [=](BlendMode) { //
 		invalidate(true);
@@ -71,7 +71,7 @@ void Material::setTexture(CString name, CTexture* texture) {
 	if (it == m_desc->textureDescs.end()) SGD_ERROR("Material texture paramter \"" + name + "\" not found");
 
 	if (name == "normal") m_hasNormalTexture = bool(texture);
-	if (!texture) texture = it->second.defValue;
+	if (!texture) texture = rgbaTexture(it->second.defRGBAColor, it->second.defType);
 
 	m_bindGroup->setTexture(it->second.binding, texture);
 }

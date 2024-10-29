@@ -55,7 +55,7 @@ void start(void (*entry)()) {
 
 	//auto envPath = "sgd://envmaps/stormy-cube.jpg";
 	auto envPath = "sgd://envmaps/sunnysky-cube.png";
-	auto envTexture = loadCubeTexture(Path(envPath), TextureFormat::any, TextureFlags::mipmap|TextureFlags::filter).result();
+	auto envTexture = loadCubeTexture(Path(envPath), TextureFormat::any, TextureFlags::default_).result();
 
 	scene->sceneRenderer()->envTexture = envTexture;
 	skybox = new Skybox(envTexture);

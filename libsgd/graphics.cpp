@@ -99,13 +99,13 @@ SGD_Material SGD_DECL sgd_LoadPBRMaterial(SGD_String path) {
 	return sgdx::createHandle(material.result());
 }
 
-SGD_Material SGD_DECL sgd_CreatePrelitMaterial() {
+SGD_Material SGD_DECL sgd_CreateEmissiveMaterial() {
 	sgdx::started();
-	auto material = sgd::createPrelitMaterial();
+	auto material = sgd::createEmissiveMaterial();
 	return sgdx::createHandle(material);
 }
 
-SGD_Material SGD_DECL sgd_LoadPrelitMaterial(SGD_String path) {
+SGD_Material SGD_DECL sgd_LoadEmissiveMaterial(SGD_String path) {
 	sgdx::started();
 	auto material = sgd::loadPrelitMaterial(sgd::Path(path));
 	if (!material) sgdx::error("Failed to load material", material.error());

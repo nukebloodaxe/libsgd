@@ -66,7 +66,7 @@ TerrainBindings::TerrainBindings()
 	});
 	lods.update();
 
-	materialSize.changed.connect(nullptr, [=](uint32_t n) {
+	materialSize.changed.connect(nullptr, [=](float n) {
 		lockUniforms().materialTexelSize = 1.0f / (float)n;
 		unlockUniforms();
 		invalidate();

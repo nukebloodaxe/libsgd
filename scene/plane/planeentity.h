@@ -4,6 +4,7 @@
 
 namespace sgd {
 
+SGD_SHARED(Material);
 SGD_SHARED(PlaneBindings);
 
 SGD_SHARED(PlaneEntity)
@@ -12,6 +13,8 @@ struct PlaneEntity : Entity {
 	SGD_OBJECT_TYPE(PlaneEntity, Entity);
 
 	PlaneEntity();
+
+	explicit PlaneEntity(Material* material);
 
 	PlaneBindings* bindings()const {
 		return m_bindings;

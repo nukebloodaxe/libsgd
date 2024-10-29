@@ -33,7 +33,7 @@ const MaterialDescriptor prelitMaterialDescriptor( //
 		{"albedo", {offsetof(PrelitMaterialUniforms, albedoColor), 4, new Vec4f(1)}},
 	},
 	{
-		{"albedo", {1, whiteTexture()}},
+		{"albedo", {1}},
 	},1);
 
 } // namespace sgd

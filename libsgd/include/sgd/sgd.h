@@ -6,9 +6,9 @@
 //! @cond
 
 #define SGD_VERSION_MAJOR 0
-#define SGD_VERSION_MINOR 17
-#define SGD_VERSION_PATCH 1
-#define SGD_VERSION "0.17.1" // How to macro-ize this?
+#define SGD_VERSION_MINOR 18
+#define SGD_VERSION_PATCH 0
+#define SGD_VERSION "0.18.0" // C/C++ hackers, how can I macro-ize this?
 
 #if defined(SWIG) || defined(SGD_GENAPI)
 
@@ -437,14 +437,14 @@ SGD_API int SGD_DECL sgd_GetTexelSRGBA(SGD_Texture texture, int x, int y);
 //! Material handle type.
 typedef SGD_Handle SGD_Material;
 
-//! Blend mode.
+//! Material blend modes, for use with @ref sgd_SetMaterialBlendMode.
 typedef enum SGD_BlendMode {
 	SGD_BLEND_MODE_OPAQUE = 1,
 	SGD_BLEND_MODE_ALPHA_MASK = 2,
 	SGD_BLEND_MODE_ALPHA_BLEND = 3,
 } SGD_BlendMode;
 
-//! Depth Comparison function.
+//! Material depth comparison functions, for use with @ref sgd_SetMaterialDepthFunc.
 typedef enum SGD_DepthFunc {
 	SGD_DEPTH_FUNC_NEVER = 1,
 	SGD_DEPTH_FUNC_LESS = 2,
@@ -456,7 +456,7 @@ typedef enum SGD_DepthFunc {
 	SGD_DEPTH_FUNC_ALWAYS = 8,
 } SGD_DepthFunc;
 
-//! Cull modes.
+//! Material cull modes, for use with @ref sgd_SetMaterialCullMode.
 typedef enum SGD_CullMode {
 	SGD_CULL_MODE_NONE = 1,
 	SGD_CULL_MODE_FRONT = 2,
@@ -468,17 +468,17 @@ typedef enum SGD_CullMode {
 //! @defgroup Material Material
 //! @{
 
-//! Load a new PBR material.
-SGD_API SGD_Material SGD_DECL sgd_LoadPBRMaterial(SGD_String path);
-
 //! Create a new PBR material.
 SGD_API SGD_Material SGD_DECL sgd_CreatePBRMaterial();
 
-//! Load a new prelit material.
-SGD_API SGD_Material SGD_DECL sgd_LoadPrelitMaterial(SGD_String path);
+//! Load a new PBR material.
+SGD_API SGD_Material SGD_DECL sgd_LoadPBRMaterial(SGD_String path);
 
-//! Create a new prelit material.
-SGD_API SGD_Material SGD_DECL sgd_CreatePrelitMaterial();
+//! Create a new emissive material.
+SGD_API SGD_Material SGD_DECL sgd_CreateEmissiveMaterial();
+
+//! Load a new emissive material.
+SGD_API SGD_Material SGD_DECL sgd_LoadEmissiveMaterial(SGD_String path);
 
 //! Set material blend mode.
 SGD_API void SGD_DECL sgd_SetMaterialBlendMode(SGD_Material material, SGD_BlendMode blendMode);
@@ -1293,7 +1293,7 @@ SGD_API void SGD_DECL sgd_SetTerrainLODs(SGD_Terrain terrain, int lods);
 SGD_API void SGD_DECL sgd_SetTerrainMaterial(SGD_Terrain terrain, SGD_Material material);
 
 //! Set terrain material size.
-SGD_API void SGD_DECL sgd_SetTerrainMaterialSize(SGD_Terrain terrain, int materialSize);
+SGD_API void SGD_DECL sgd_SetTerrainMaterialSize(SGD_Terrain terrain, float materialSize);
 
 //! Set terrain height texture.
 SGD_API void SGD_DECL sgd_SetTerrainHeightTexture(SGD_Terrain terrain, SGD_Texture texture);
@@ -1360,7 +1360,14 @@ SGD_API SGD_Collider SGD_DECL sgd_CreateSphereCollider(SGD_Entity entity, int co
 SGD_API SGD_Collider SGD_DECL sgd_CreateEllipsoidCollider(SGD_Entity entity, int colliderType, float radius, float height);
 
 //! Create a new mesh collider and attach it to entity.
+//!
+//! If mesh is 0, entity must a Model entity, and is used to provide the collision mesh.
 SGD_API SGD_Collider SGD_DECL sgd_CreateMeshCollider(SGD_Entity entity, int colliderType, SGD_Mesh mesh);
+
+//! Create a new terrain collider and attach it to entity.
+//!
+//! The entity must be a terrain entity.
+SGD_API SGD_Collider SGD_DECL sgd_CreateTerrainCollider(SGD_Entity terrain,int colliderType);
 
 //! Create a new plane collider and attach it to entity.
 SGD_API SGD_Collider SGD_DECL sgd_CreatePlaneCollider(SGD_Entity entity, int colliderType);

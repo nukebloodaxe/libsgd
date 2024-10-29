@@ -15,7 +15,10 @@ struct MaterialDescriptor {
 	};
 	struct TextureDesc {
 		uint32_t binding;
-		const Texture* defValue;
+		const TextureType defType = TextureType::e2d;
+		const TextureFormat defFormat = TextureFormat::any;
+		const TextureFlags defFlags = TextureFlags::default_;
+		const uint32_t defRGBAColor = 0xffffff;
 	};
 	String const typeName;
 	const BindGroupDescriptor* bindGroupDescriptor;

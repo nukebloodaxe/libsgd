@@ -659,12 +659,10 @@ SGD_Terrain SGD_DECL sgd_CreateTerrain() {
 	return sgdx::createHandle(terrain);
 }
 
-//! Set terrain size.
 void SGD_DECL sgd_SetTerrainSize(SGD_Terrain hterrain, int size) {
 	sgdx::resolveHandle<sgd::Terrain>(hterrain)->bindings()->size = size;
 }
 
-//! Set terrain level-of-details.
 void SGD_DECL sgd_SetTerrainLODs(SGD_Terrain hterrain, int lods) {
 	sgdx::resolveHandle<sgd::Terrain>(hterrain)->bindings()->lods = lods;
 }
@@ -673,8 +671,7 @@ void SGD_DECL sgd_SetTerrainMaterial(SGD_Terrain hterrain, SGD_Material hmateria
 	sgdx::resolveHandle<sgd::Terrain>(hterrain)->bindings()->material = sgdx::resolveHandle<sgd::Material>(hmaterial);
 }
 
-//! Set terrain material size.
-void SGD_DECL sgd_SetTerrainMaterialSize(SGD_Terrain hterrain, int materialSize) {
+void SGD_DECL sgd_SetTerrainMaterialSize(SGD_Terrain hterrain, float materialSize) {
 	sgdx::resolveHandle<sgd::Terrain>(hterrain)->bindings()->materialSize = materialSize;
 }
 
@@ -702,14 +699,14 @@ SGD_Real SGD_DECL sgd_GetTerrainHeight(SGD_Terrain hterrain, SGD_Real x, SGD_Rea
 SGD_Collider SGD_DECL sgd_CreateSphereCollider(SGD_Entity hentity, int colliderType, float radius) {
 	if ((uint32_t)colliderType > 31) sgdx::error("ColliderType must be in the range 0..31");
 	auto entity = sgdx::resolveHandle<sgd::Entity>(hentity);
-	auto collider = new sgd::SphereCollider(entity, (uint32_t)colliderType, radius);
+	auto collider = new sgd::SphereCollider(entity, colliderType, radius);
 	return sgdx::createHandle(collider);
 }
 
 SGD_Collider SGD_DECL sgd_CreateEllipsoidCollider(SGD_Entity hentity, int colliderType, float radius, float height) {
 	if ((uint32_t)colliderType > 31) sgdx::error("ColliderType must be in the range 0..31");
 	auto entity = sgdx::resolveHandle<sgd::Entity>(hentity);
-	auto collider = new sgd::EllipsoidCollider(entity, (uint32_t)colliderType, radius, height);
+	auto collider = new sgd::EllipsoidCollider(entity, colliderType, radius, height);
 	return sgdx::createHandle(collider);
 }
 
@@ -723,7 +720,14 @@ SGD_Collider SGD_DECL sgd_CreateMeshCollider(SGD_Entity hentity, int colliderTyp
 		if (!mesh) sgdx::error("Model must have a valid mesh");
 	}
 	auto data = sgd::getOrCreateMeshColliderData(mesh);
-	auto collider = new sgd::MeshCollider(entity, (uint32_t)colliderType, data);
+	auto collider = new sgd::MeshCollider(entity, colliderType, data);
+	return sgdx::createHandle(collider);
+}
+
+SGD_Collider SGD_DECL sgd_CreateTerrainCollider(SGD_Entity hentity, int colliderType) {
+	if ((uint32_t)colliderType > 31) sgdx::error("ColliderType must be in the range 0..31");
+	auto terrain = sgdx::resolveHandle<sgd::Terrain>(hentity);
+	auto collider = new sgd::TerrainCollider(terrain, colliderType, terrain->bindings());
 	return sgdx::createHandle(collider);
 }
 

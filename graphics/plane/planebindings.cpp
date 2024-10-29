@@ -1,6 +1,6 @@
 #include "planebindings.h"
 
-#include "../material/prelitmaterial.h"
+#include "../material/emissivematerial.h"
 #include "../render/renderqueue.h"
 #include "planebindgroup.h"
 
@@ -27,7 +27,7 @@ PlaneBindings::PlaneBindings()
 	});
 	color.update();
 
-	m_defaultMaterial = new Material(&prelitMaterialDescriptor);
+	m_defaultMaterial = new Material(&emissiveMaterialDescriptor);
 }
 
 const PlaneUniforms& PlaneBindings::uniforms() const {
@@ -44,9 +44,10 @@ void PlaneBindings::unlockUniforms() const {
 
 void PlaneBindings::render(RenderQueue* rq) const {
 
-	auto m = material();
+	CMaterial* m = material();
+	if(!m) m = m_defaultMaterial;
 
-	rq->addRenderOp(nullptr, nullptr, m ? m : m_defaultMaterial, m_bindGroup, emptyBindGroup(BindGroupType::renderer), 4, 1, 0,
+	rq->addRenderOp(nullptr, nullptr, m, m_bindGroup, emptyBindGroup(BindGroupType::renderer), 4, 1, 0,
 					0, false);
 }
 

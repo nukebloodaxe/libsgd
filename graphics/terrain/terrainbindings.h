@@ -18,7 +18,7 @@ struct TerrainBindings : GraphicsResource {
 
 	Property<uint32_t> size{1024};
 	Property<uint32_t> lods{4};
-	Property<uint32_t> materialSize{1024};
+	Property<float> materialSize{1024};
 	Property<int> debugMode{0};
 
 	Property<CTexturePtr> heightTexture;

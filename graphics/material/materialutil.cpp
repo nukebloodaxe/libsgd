@@ -1,78 +1,115 @@
 #include "materialutil.h"
 
+#include "emissivematerial.h"
 #include "pbrmaterial.h"
 #include "prelitmaterial.h"
-#include "emissivematerial.h"
 
 #include "../core/textureutil.h"
 
 #include <json11.hpp>
 
 namespace sgd {
-/*
-{
-	"class" : "Material",
-			  "type" : "pbr",
-					   "blendMode" : 1,
-					   "depthFunc" : 1,
-					   "cullMode" : 0,
-					   "textures"
-		: {"albedo" : {"class" : "Texture", "path" : " ./blah.png", "type" : 1, "format" : 4, "flags" : 31}},
-		  "colors" : {"albedo" : [ 1, 1, 1, 1 ]},
-					 "floats" : {
-	}
-} // namespace sgd
- */
 
-Material* deserializeMaterial(const json11::Json& json) {
-	auto desc = MaterialDescriptor::forTypeName(json["type"].string_value());
-	if(!desc) SGD_ERROR("Unrecognized material type");
+Material* deserializeMaterial(const json11::Json& json, CPath rootPath) {
+
+	auto mtype = json["type"].string_value();
+	auto desc = MaterialDescriptor::forTypeName(mtype);
+	if (!desc) {
+		SGD_LOG << "Material error: unrecognized type \"" + mtype + "\"";
+		return nullptr;
+	}
+
 	auto material = new Material(desc);
-	if(!json["blendMode"].is_null()) material->blendMode = (BlendMode)json["blendMode"].int_value();
-	if(!json["depthFunc"].is_null()) material->depthFunc = (DepthFunc)json["depthFunc"].int_value();
-	if(!json["cullMode"].is_null()) material->cullMode = (CullMode)json["cullMode"].int_value();
-	for(auto& kv : json["textures"].object_items()) {
-		auto& items = kv.second;
-		auto path = items["path"].string_value();
-		auto type = !items["type"].is_null() ? (TextureType)items["type"].int_value() : TextureType::e2d;
-		auto format = !items["type"].is_null() ? (TextureFormat)items["format"].int_value() : TextureFormat::any;
-		auto flags = !items["flags"].is_null() ? (TextureFlags)items["flags"].int_value() : TextureFlags::default_;
+	if (!json["blendMode"].is_null()) material->blendMode = (BlendMode)json["blendMode"].int_value();
+	if (!json["depthFunc"].is_null()) material->depthFunc = (DepthFunc)json["depthFunc"].int_value();
+	if (!json["cullMode"].is_null()) material->cullMode = (CullMode)json["cullMode"].int_value();
+
+	for (auto& kv : json["textures"].object_items()) {
+
+		auto qname = '\"' + kv.first + '\"';
+
+		auto it = desc->textureDescs.find(kv.first);
+		if (it == desc->textureDescs.end()) {
+			SGD_LOG << "Material error: texture" << qname << "not found in material type \"" + mtype + "\"";
+			continue;
+		}
+		auto& texDesc = it->second;
+
+		auto type = texDesc.defType;
+		auto format = texDesc.defFormat;
+		auto flags = texDesc.defFlags;
+		Path path;
+
+		auto& value = kv.second;
+		if (value.is_string()) {
+			path = rootPath / value.string_value();
+		} else if (value.is_object()) {
+			if (!value["path"].is_string()) {
+				SGD_LOG << "Material error: texture" << qname << "has no path";
+				continue;
+			}
+			path = rootPath / value["path"].string_value();
+			if (!value["type"].is_null()) type = (TextureType)value["type"].int_value();
+			if (!value["format"].is_null()) format = (TextureFormat)value["format"].int_value();
+			if (!value["flags"].is_null()) flags = (TextureFlags)value["flags"].int_value();
+		} else {
+			SGD_LOG << "Material error: texture" << qname << "has invalid type";
+			continue;
+		}
 		Texture* texture;
 		switch (type) {
 		case TextureType::e2d:
-			texture = load2DTexture(Path(path), format, flags).result();
+			texture = load2DTexture(path, format, flags).result();
 			break;
 		case TextureType::cube:
-			texture = loadCubeTexture(Path(path), format, flags).result();
+			texture = loadCubeTexture(path, format, flags).result();
 			break;
 		case TextureType::array:
-			texture = loadArrayTexture(Path(path), format, flags).result();
+			texture = loadArrayTexture(path, format, flags).result();
 			break;
-		case TextureType::cubeArray:
-			SGD_ERROR("OOPS");
+		default:
+			SGD_LOG << "Material error: invalid type of texture \""+kv.first+"\"";
+			continue;
 		}
 		material->setTexture(kv.first, texture);
 	}
-	for(auto& kv : json["colors"].object_items() ){
+	for (auto& kv : json["colors"].object_items()) {
 		auto& items = kv.second.array_items();
+		if (items.size() != 3) {
+			SGD_LOG << "Material error: invalid type for color \"" + kv.first + "\"";
+			continue;
+		}
 		material->setColor(kv.first, Vec4f((float)items[0].number_value(), (float)items[1].number_value(),
 										   (float)items[2].number_value(), (float)items[3].number_value()));
 	}
-	for(auto& kv : json["floats"].object_items() ) {
+	for (auto& kv : json["floats"].object_items()) {
 		material->setFloat(kv.first, (float)kv.second.number_value());
 	}
 	return material;
 }
 
+Material* createMaterial(CString type) {
+	auto desc  = MaterialDescriptor::forTypeName(type);
+	if(!desc) SGD_ERROR("Unknown material type \""+type+"\"");
+
+	return new Material(desc);
+}
+
 Expected<Material*, FileioEx> loadMaterial(CPath path) {
+
 	auto tpath = path;
-	if(toLower(tpath.ext())!="sgd") tpath = tpath / "material.sgd";
+	if (toLower(tpath.ext()) != ".sgd") tpath = tpath / "material.sgd";
+
 	auto str = loadString(tpath);
-	if(!str) return str.error();
+	if (!str) return str.error();
+
 	String err;
-	auto json = json11::Json::parse(str.result(),err,json11::JsonParse::COMMENTS);
-	if(json.is_null()) return SGD_PATHEX("JSON error parsing",tpath);
-	auto material = deserializeMaterial(json);
+	auto json = json11::Json::parse(str.result(), err, json11::JsonParse::COMMENTS);
+	if (json.is_null()) return SGD_PATHEX("JSON error parsing", tpath);
+
+	auto material = deserializeMaterial(json, tpath.parentPath());
+	if (!material) return SGD_PATHEX("Failed to deserialize material", path);
+
 	return material;
 }
 
@@ -81,15 +118,28 @@ Material* createPBRMaterial() {
 }
 
 Expected<Material*, FileioEx> loadPBRMaterial(CPath path) {
-	if (!path.isUrl() && !path.exists()) return SGD_FILEIOEX("Material directory does not exist");
 
-	auto texFlags = TextureFlags::mipmap | TextureFlags::filter;
+	auto texture = load2DTexture(path, TextureFormat::any, TextureFlags::default_);
+	if (!texture) return texture.error();
+
+	auto material = new Material(&pbrMaterialDescriptor);
+	material->path = path;
+
+	material->setTexture("albedo", texture.result());
+
+	return material;
+
+#if 0
+	if (!path.isUrl() && !path.exists()) return SGD_FILEIOEX("Material path does not exist");
+
+	auto flags = TextureFlags::default_;
 
 	Set<String> exts{".png", ".jpg", ".jpeg", ".bmp", ".tga", ".gif", ".exr"};
-	if (exts.find(path.ext()) != exts.end()) {
-		auto texture = load2DTexture(path, TextureFormat::any, texFlags);
+	if (exts.find(toLower(path.ext())) != exts.end()) {
+
+		auto texture = load2DTexture(path, TextureFormat::any, flags);
 		if (!texture) return texture.error();
-		SGD_LOG << "Texture" << path.str() << "loaded, format:" << (int)texture.result()->format();
+
 		auto material = new Material(&pbrMaterialDescriptor);
 		material->setTexture("albedo", texture.result());
 		material->path = path;
@@ -97,7 +147,7 @@ Expected<Material*, FileioEx> loadPBRMaterial(CPath path) {
 	}
 
 	auto tryLoad = [=](CString suffix, TextureFormat format) -> Texture* {
-		auto texture = load2DTexture(path / path.stem() + suffix, format, texFlags);
+		auto texture = load2DTexture(path / path.stem() + suffix, format, flags);
 		return texture ? texture.result() : nullptr;
 	};
 
@@ -107,26 +157,25 @@ Expected<Material*, FileioEx> loadPBRMaterial(CPath path) {
 	if (auto texture = tryLoad("_Color.jpg", TextureFormat::any)) {
 		material->setTexture("albedo", texture);
 	}
-
+	if (auto texture = tryLoad("_Emissive.jpg", TextureFormat::any)) {
+		material->setTexture("emissive", texture);
+	}
 	if (auto texture = tryLoad("_Metalness.jpg", TextureFormat::rgba8)) {
 		material->setTexture("metallic", texture);
 		material->setFloat("metallic", 1);
 	}
-
 	if (auto texture = tryLoad("_Roughness.jpg", TextureFormat::rgba8)) {
 		material->setTexture("roughness", texture);
 		material->setFloat("roughness", 1);
 	}
-
 	if (auto texture = tryLoad("_AmbientOcclusion.jpg", TextureFormat::rgba8)) {
 		material->setTexture("occlusion", texture);
 	}
-
 	if (auto texture = tryLoad("_NormalGL.jpg", TextureFormat::rgba8)) {
 		material->setTexture("normal", texture);
 	}
-
 	return material;
+#endif
 }
 
 Material* createPrelitMaterial() {
@@ -135,12 +184,12 @@ Material* createPrelitMaterial() {
 
 Expected<Material*, FileioEx> loadPrelitMaterial(CPath path) {
 
-	auto flags = TextureFlags::mipmap | TextureFlags::filter | TextureFlags::clamp;
-
-	auto texture = load2DTexture(path, TextureFormat::any, flags);
+	auto texture = load2DTexture(path, TextureFormat::any, TextureFlags::default_);
 	if (!texture) return texture.error();
 
 	auto material = createPrelitMaterial();
+	material->path = path;
+
 	material->setTexture("albedo", texture.result());
 
 	return material;
@@ -152,12 +201,12 @@ Material* createEmissiveMaterial() {
 
 Expected<Material*, FileioEx> loadEmissiveMaterial(CPath path) {
 
-	auto flags = TextureFlags::mipmap | TextureFlags::filter | TextureFlags::clamp;
-
-	auto texture = load2DTexture(path, TextureFormat::any, flags);
+	auto texture = load2DTexture(path, TextureFormat::any, TextureFlags::default_);
 	if (!texture) return texture.error();
 
-	auto material = createPrelitMaterial();
+	auto material = createEmissiveMaterial();
+	material->path = path;
+
 	material->setTexture("emissive", texture.result());
 
 	return material;

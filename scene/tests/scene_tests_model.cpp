@@ -6,11 +6,11 @@ void entry() {
 	float size = 330.0f;
 
 	{
-		MaterialPtr groundMaterial = loadPBRMaterial(Path("sgd://materials/Gravel023_1K-JPG")).result();
-		groundMaterial->setFloat("roughness", 1);
+//		MaterialPtr groundMaterial = loadPBRMaterial(Path("sgd://materials/Gravel023_1K-JPG")).result();
+		MaterialPtr groundMaterial = loadMaterial(Path("~/Desktop/materials/Gravel023_1K-JPG")).result();
+//		groundMaterial->setFloat("roughness", 1);
 
-		PlaneEntityPtr groundPlane = new PlaneEntity();
-		groundPlane->bindings()->material = groundMaterial;
+		PlaneEntityPtr groundPlane = new PlaneEntity(groundMaterial);
 		scale(groundPlane,{4,4,4});
 		scene->add(groundPlane);
 
@@ -47,8 +47,8 @@ void entry() {
 	config.csmDepthBias = 0.0001f;
 	scene->sceneRenderer()->sceneBindings()->unlockConfigUniforms();
 
-	FogEffectPtr fog = new FogEffect();
-	scene->sceneRenderer()->add(fog);
+	//FogEffectPtr fog = new FogEffect();
+	//scene->sceneRenderer()->add(fog);
 
 	auto dc = overlay->drawList();
 

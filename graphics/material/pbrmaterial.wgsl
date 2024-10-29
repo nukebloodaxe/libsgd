@@ -7,6 +7,7 @@ struct MaterialUniforms {
     emissiveColor: vec4f,
     metallicFactor:f32,
     roughnessFactor:f32,
+    textureSize:f32,
 }
 
 @group(1) @binding(0) var<uniform> material_uniforms: MaterialUniforms;
@@ -25,7 +26,7 @@ struct MaterialUniforms {
 
 fn evaluateMaterial(position: vec3f, tanMatrix: mat3x3f, texCoords: vec3f, color: vec4f) -> vec4f {
 
-    let texCoords2d = texCoords.xy;
+    let texCoords2d = texCoords.xy / material_uniforms.textureSize;
 
 	let albedo = textureSample(material_albedoTexture, material_albedoSampler, texCoords2d) * material_uniforms.albedoColor * color;
 

@@ -65,7 +65,12 @@ struct Fragment {
     let spos = wpos.xyz / wpos.w;
     if spos.z >=1 { discard; }
 
-    let tanMatrix = mat3x3f(normalize(in.tanMatrix0), normalize(in.tanMatrix1), normalize(in.tanMatrix2));
+    let tanMatrix = mat3x3f(
+        geometry_plane.worldMatrix[0].xyz,
+        geometry_plane.worldMatrix[2].xyz,
+        geometry_plane.worldMatrix[1].xyz);
+
+    //tanMatrix = mat3x3f(normalize(in.tanMatrix0), normalize(in.tanMatrix1), normalize(in.tanMatrix2));
 
     var out:Fragment;
 

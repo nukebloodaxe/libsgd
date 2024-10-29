@@ -33,7 +33,7 @@ const MaterialDescriptor emissiveMaterialDescriptor( //
 		{"emissive", {offsetof(EmissiveMaterialUniforms, emissiveColor), 4, new Vec4f(1)}},
 	},
 	{
-		{"emissive", {1, whiteTexture()}},
+		{"emissive", {1, TextureType::e2d, TextureFormat::any, TextureFlags::default_}},
 	},
 	1);
 } // namespace sgd

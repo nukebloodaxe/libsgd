@@ -11,6 +11,7 @@ struct alignas(16) PBRMaterialUniforms {
 	Vec4f emissiveColor;
 	float metallicFactor{};
 	float roughnessFactor{};
+	float textureSize{};
 };
 
 auto shaderSource{
@@ -47,14 +48,15 @@ const MaterialDescriptor pbrMaterialDescriptor( //
 		{"emissive", {offsetof(PBRMaterialUniforms, emissiveColor), 4, new Vec4f(0)}},
 		{"metallic", {offsetof(PBRMaterialUniforms, metallicFactor), 1, new float(0)}},
 		{"roughness", {offsetof(PBRMaterialUniforms, roughnessFactor), 1, new float(1)}},
+		{"textureSize",{offsetof(PBRMaterialUniforms, textureSize), 1, new float(1)}},
 	},
 	{
-		{"albedo", {1, whiteTexture()}},
-		{"emissive", {3, whiteTexture()}},
-		{"metallic", {5, whiteTexture()}},
-		{"roughness", {7, whiteTexture()}},
-		{"occlusion", {9, whiteTexture()}},
-		{"normal", {11, flatTexture()}},
+		{"albedo", {1, TextureType::e2d, TextureFormat::any, TextureFlags::default_}},
+		{"emissive", {3, TextureType::e2d, TextureFormat::any, TextureFlags::default_}},
+		{"metallic", {5, TextureType::e2d, TextureFormat::rgba8, TextureFlags::default_}},
+		{"roughness", {7, TextureType::e2d, TextureFormat::rgba8, TextureFlags::default_}},
+		{"occlusion", {9, TextureType::e2d, TextureFormat::rgba8, TextureFlags::default_}},
+		{"normal", {11, TextureType::e2d, TextureFormat::rgba8, TextureFlags::default_, 0xffff8080}},
 	},
 	1);
 
