@@ -56,10 +56,7 @@ add_library(graphics
 	material/pbrmaterial.cpp
 	material/pbrmaterial.h
 	material/pbrmaterial.wgsl
-	material/prelitmaterial.cpp
-	material/prelitmaterial.h
-	material/prelitmaterial.wgsl
-    
+
 	mesh/mesh.cpp
 	mesh/mesh.h
 	mesh/meshprimitives.cpp

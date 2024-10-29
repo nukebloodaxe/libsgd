@@ -2,7 +2,6 @@
 
 #include "emissivematerial.h"
 #include "pbrmaterial.h"
-#include "prelitmaterial.h"
 
 #include "../core/textureutil.h"
 
@@ -176,23 +175,6 @@ Expected<Material*, FileioEx> loadPBRMaterial(CPath path) {
 	}
 	return material;
 #endif
-}
-
-Material* createPrelitMaterial() {
-	return new Material(&prelitMaterialDescriptor);
-}
-
-Expected<Material*, FileioEx> loadPrelitMaterial(CPath path) {
-
-	auto texture = load2DTexture(path, TextureFormat::any, TextureFlags::default_);
-	if (!texture) return texture.error();
-
-	auto material = createPrelitMaterial();
-	material->path = path;
-
-	material->setTexture("albedo", texture.result());
-
-	return material;
 }
 
 Material* createEmissiveMaterial() {

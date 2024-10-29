@@ -1,5 +1,9 @@
 ***** v0.18.0 *****
 
+Removed prelit material type.
+
+Added emissive material type.
+
 Added terrain collider.
 
 Changed terrain material size to float.

@@ -107,7 +107,7 @@ SGD_Material SGD_DECL sgd_CreateEmissiveMaterial() {
 
 SGD_Material SGD_DECL sgd_LoadEmissiveMaterial(SGD_String path) {
 	sgdx::started();
-	auto material = sgd::loadPrelitMaterial(sgd::Path(path));
+	auto material = sgd::loadEmissiveMaterial(sgd::Path(path));
 	if (!material) sgdx::error("Failed to load material", material.error());
 	return sgdx::createHandle(material.result());
 }

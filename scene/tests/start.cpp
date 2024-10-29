@@ -63,7 +63,8 @@ void start(void (*entry)()) {
 
 	light = new Light(LightType::directional);
 	scene->add(light);
-	turn(light, {-45, -45, 0});
+	turn(light, {-60, -45, 0});	// mostly down
+	//turn(light, {-90, 0, 0});	// straight down
 
 	overlay = new Overlay();
 	scene->add(overlay);

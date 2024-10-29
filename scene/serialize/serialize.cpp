@@ -164,7 +164,7 @@ struct Deserializer {
 					if (type == "pbr") {
 						material = loadPBRMaterial(path).result();
 					} else if (type == "prelit") {
-						material = loadPrelitMaterial(path).result();
+						material = loadEmissiveMaterial(path).result();
 					} else {
 						SGD_ERROR("OOPS");
 					}

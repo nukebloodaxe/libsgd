@@ -23,8 +23,7 @@
 #include "material/materialutil.h"
 #include "material/nullmaterial.h"
 #include "material/pbrmaterial.h"
-#include "material/prelitmaterial.h"
-    
+
 #include "mesh/mesh.h"
 #include "mesh/meshprimitives.h"
 #include "mesh/meshrenderer.h"

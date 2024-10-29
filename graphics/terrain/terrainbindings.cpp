@@ -1,7 +1,7 @@
 #include "terrainbindings.h"
 
 #include "../core/textureutil.h"
-#include "../material/prelitmaterial.h"
+#include "../material/emissivematerial.h"
 #include "../render/renderqueue.h"
 
 namespace sgd {
@@ -95,7 +95,7 @@ TerrainBindings::TerrainBindings()
 	});
 	debugMode.changed.emit(debugMode());
 
-	material = new Material(&prelitMaterialDescriptor);
+	material = new Material(&emissiveMaterialDescriptor);
 }
 
 CTerrainUniforms& TerrainBindings::uniforms() const {

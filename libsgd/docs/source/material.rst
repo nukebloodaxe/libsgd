@@ -106,7 +106,7 @@ property and a custom "emissive" color property which are multiplied together to
 
 To create an 'empty' emissive material use :any:`sgd_CreateEmissiveMaterial`. Once created, it is up to you to assign a texture and/or color using using :any:`sgd_SetMaterialTexture` and :any:`sgd_SetMaterialColor` with the "emissive" property name.
 
-To load an emissive material from an image file file use :any:`sgd_LoadEmissiveMaterial`. This is a simple helper function that loads a 2d texture using :any:`sgd_Load2DTexture` and assigns it to the "emissive" texture property of a new emissive material. If you require more control than this, ie: you want to specify texture format or texture flags, you will have to create a material as above and assign textures manually.
+To load an emissive material from an image file file use :any:`sgd_LoadEmissiveMaterial`. This is a simple helper function that loads a 2d texture using :any:`sgd_Load2DTexture` and assigns it to the "emissive" texture property of a new emissive material. If you require more control than this, eg: you want to specify texture format or texture flags, you will have to create a material as above and assign textures manually.
 
 
 PBR Materials
@@ -116,7 +116,7 @@ PBR (physically based rendering) materials are the most physically accurate type
 
 To create an 'empty' PBR material use :any:`sgd_CreatePBRMaterial`. Once created, it is up to you to assign textures, colors and floats to the material using :any:`sgd_SetMaterialTexture`, :any:`sgd_SetMaterialColor` and :any:`sgd_SetMaterialFloat`.
 
-To load a PBR material from an image file file use :any:`sgd_LoadPBRMaterial`. This is a simple helper function that loads a 2d texture using :any:`sgd_Load2DTexture` and assigns it to the "albedo" texture property of a new PBR material. If you require more control than this, ie: you want to specify texture format or texture flags, you will have to create a material as above and assign textures manually.
+To load a PBR material from an image file file use :any:`sgd_LoadPBRMaterial`. This is a simple helper function that loads a 2d texture using :any:`sgd_Load2DTexture` and assigns it to the "albedo" texture property of a new PBR material. If you require more control than this, eg: you want to specify texture format or texture flags, you will have to create a material as above and assign textures manually.
 
 The custom material properties for PBR materials are:
 
@@ -152,7 +152,6 @@ The custom material properties for PBR materials are:
      - 2d texture
      - Surface normal map.
      - Flat normal texture.
-
 
 
 Types
