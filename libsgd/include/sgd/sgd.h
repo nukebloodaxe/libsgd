@@ -365,7 +365,7 @@ typedef enum SGD_TextureFormat {
 //!
 //! By default, texture coordinates wrap at the edges of textures.
 //!
-//! Textures are always linear filtered whe minimized.
+//! Textures are always linear filtered when minimized.
 typedef enum SGD_TextureFlags {
 	SGD_TEXTURE_FLAGS_NONE = 0x0,	  //!< No texture flags.
 	SGD_TEXTURE_FLAGS_CLAMP_U = 0x01, //!< Clamp texture U coordinates.
@@ -489,15 +489,26 @@ SGD_API void SGD_DECL sgd_SetMaterialDepthFunc(SGD_Material material, SGD_DepthF
 //! Set material cull mode.
 SGD_API void SGD_DECL sgd_SetMaterialCullMode(SGD_Material material, SGD_CullMode cullMode);
 
-//! Set material texture parameter.
-SGD_API void SGD_DECL sgd_SetMaterialTexture(SGD_Material material, SGD_String parameter, SGD_Texture texture);
+//! Set material texture property.
+SGD_API void SGD_DECL sgd_SetMaterialTexture(SGD_Material material, SGD_String property, SGD_Texture texture);
 
-//! Set material color parameter.
-SGD_API void SGD_DECL sgd_SetMaterialColor(SGD_Material material, SGD_String parameter, float red, float green, float blue,
+//! Set material color property.
+//!
+//! The color components should be in non-linear color space, and should not be premultiplied by alpha.
+SGD_API void SGD_DECL sgd_SetMaterialColor(SGD_Material material, SGD_String property, float red, float green, float blue,
 										   float alpha);
 
-//! Set material float parameter.
-SGD_API void SGD_DECL sgd_SetMaterialFloat(SGD_Material material, SGD_String parameter, float value);
+//! Set material vec4f property.
+SGD_API void SGD_DECL sgd_SetMaterialVec4f(SGD_Material material, SGD_String property, float x, float y, float z, float w);
+
+//! Set material vec3f property.
+SGD_API void SGD_DECL sgd_SetMaterialVec3f(SGD_Material material, SGD_String property, float x, float y, float z);
+
+//! Set material vec2f property.
+SGD_API void SGD_DECL sgd_SetMaterialVec2f(SGD_Material material, SGD_String property, float x, float y);
+
+//! Set material float property.
+SGD_API void SGD_DECL sgd_SetMaterialFloat(SGD_Material material, SGD_String property, float value);
 
 //! @}
 

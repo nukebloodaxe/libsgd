@@ -30,7 +30,7 @@ const MaterialDescriptor emissiveMaterialDescriptor( //
 	&bindGroupDescriptor,							 //
 	sizeof(EmissiveMaterialUniforms),				 //
 	{
-		{"emissive", {offsetof(EmissiveMaterialUniforms, emissiveColor), 4, new Vec4f(1)}},
+		{"emissive", {offsetof(EmissiveMaterialUniforms, emissiveColor), 0x104, new Vec4f(1)}},
 	},
 	{
 		{"emissive", {1, TextureType::e2d, TextureFormat::any, TextureFlags::default_}},

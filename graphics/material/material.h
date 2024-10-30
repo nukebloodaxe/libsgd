@@ -10,7 +10,7 @@ SGD_SHARED(Material);
 struct MaterialDescriptor {
 	struct UniformDesc {
 		size_t offset;
-		size_t type;	// n floats for now
+		size_t type;	// n floats for now, 0x104=color, 4=vec4f, 3=vec3f, 2=vec2f, 1=float
 		void* defValue;
 	};
 	struct TextureDesc {
@@ -62,6 +62,10 @@ struct Material : GraphicsResource {
 	void setTexture(CString name, CTexture* texture);
 
 	void setColor(CString name, CVec4f color);
+
+	void setVec4f(CString name, CVec4f value);
+	void setVec3f(CString name, CVec3f value);
+	void setVec2f(CString name, CVec2f value);
 
 	void setFloat(CString name, float value);
 

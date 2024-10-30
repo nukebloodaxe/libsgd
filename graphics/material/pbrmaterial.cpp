@@ -11,7 +11,7 @@ struct alignas(16) PBRMaterialUniforms {
 	Vec4f emissiveColor;
 	float metallicFactor{};
 	float roughnessFactor{};
-	float textureSize{};
+	Vec2f textureScale{};
 };
 
 auto shaderSource{
@@ -44,11 +44,11 @@ const MaterialDescriptor pbrMaterialDescriptor( //
 	&bindGroupDescriptor,						//
 	sizeof(PBRMaterialUniforms),
 	{
-		{"albedo", {offsetof(PBRMaterialUniforms, albedoColor), 4, new Vec4f(1)}},
-		{"emissive", {offsetof(PBRMaterialUniforms, emissiveColor), 4, new Vec4f(0)}},
+		{"albedo", {offsetof(PBRMaterialUniforms, albedoColor), 0x104, new Vec4f(1)}},
+		{"emissive", {offsetof(PBRMaterialUniforms, emissiveColor), 0x104, new Vec4f(0)}},
 		{"metallic", {offsetof(PBRMaterialUniforms, metallicFactor), 1, new float(0)}},
 		{"roughness", {offsetof(PBRMaterialUniforms, roughnessFactor), 1, new float(1)}},
-		{"textureSize",{offsetof(PBRMaterialUniforms, textureSize), 1, new float(1)}},
+		{"textureScale",{offsetof(PBRMaterialUniforms, textureScale), 2, new Vec2f(1)}},
 	},
 	{
 		{"albedo", {1, TextureType::e2d, TextureFormat::any, TextureFlags::default_}},

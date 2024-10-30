@@ -36,7 +36,7 @@ const MaterialDescriptor fontMaterialDescriptor( //
 	&bindGroupDescriptor,						 //
 	sizeof(FontUniforms),
 	{
-		{"atlasColor", {offsetof(FontUniforms, atlasColor), 4, new Vec4f(1)}},
+		{"atlasColor", {offsetof(FontUniforms, atlasColor), 0x104, new Vec4f(1)}},
 	},
 	{
 		{"atlas", {1}},

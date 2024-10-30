@@ -1,5 +1,9 @@
 ***** v0.18.0 *****
 
+Added PBR material vec2f property "textureScale" for dynamically scaling tex coorinates.
+
+Added SetMaterialVec4f, SetMaterialVec3f, SetMaterialVec2f for setting linear vector values.
+
 Removed prelit material type.
 
 Added emissive material type.

@@ -94,10 +94,6 @@ The directory structure for this file and it's texture should be like this:
 To load this material, you just need to pass the path to the top level directorty to sgd_LoadMaterial().
 
 
-Material Types
-==============
-
-
 Emissive Materials
 ------------------
 

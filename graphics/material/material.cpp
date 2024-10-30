@@ -43,7 +43,7 @@ Material::Material(CMaterialDescriptor* desc) : m_desc(desc),
 
 	auto uniforms = (uint8_t*)std::malloc(m_desc->uniformsSize);
 	for (auto& kv : m_desc->uniformDescs) {
-		std::memcpy(uniforms + kv.second.offset, kv.second.defValue, kv.second.type * 4);
+		std::memcpy(uniforms + kv.second.offset, kv.second.defValue, (kv.second.type & 0xff) * 4);
 	}
 	m_uniformBuffer = new Buffer(BufferType::uniform, uniforms, m_desc->uniformsSize);
 	std::free(uniforms);
@@ -77,22 +77,41 @@ void Material::setTexture(CString name, CTexture* texture) {
 }
 
 void Material::setColor(CString name, CVec4f color) {
-
 	auto it = m_desc->uniformDescs.find(name);
 	if (it == m_desc->uniformDescs.end()) SGD_ERROR("Material color parameter \"" + name + "\" not found");
-
-	if (it->second.type != 4) SGD_ERROR("Material parameter \"" + name + "\" is not of type 'color'");
+	if (it->second.type != 0x104) SGD_ERROR("Material parameter \"" + name + "\" is not of type 'color'");
 
 	auto lcolor = toLinearColor(color);
 
 	m_uniformBuffer->update(&lcolor, it->second.offset, sizeof(lcolor));
 }
 
-void Material::setFloat(CString name, float value) {
+void Material::setVec4f(CString name, CVec4f value) {
+	auto it = m_desc->uniformDescs.find(name);
+	if (it == m_desc->uniformDescs.end()) SGD_ERROR("Material color parameter \"" + name + "\" not found");
+	if (it->second.type != 4) SGD_ERROR("Material parameter \"" + name + "\" is not of type 'vec4f");
 
+	m_uniformBuffer->update(&value, it->second.offset, sizeof(value));
+}
+
+void Material::setVec3f(CString name, CVec3f value) {
+	auto it = m_desc->uniformDescs.find(name);
+	if (it == m_desc->uniformDescs.end()) SGD_ERROR("Material color parameter \"" + name + "\" not found");
+	if (it->second.type != 3) SGD_ERROR("Material parameter \"" + name + "\" is not of type 'vec4f");
+	m_uniformBuffer->update(&value, it->second.offset, sizeof(value));
+}
+
+void Material::setVec2f(CString name, CVec2f value) {
+	auto it = m_desc->uniformDescs.find(name);
+	if (it == m_desc->uniformDescs.end()) SGD_ERROR("Material color parameter \"" + name + "\" not found");
+	if (it->second.type != 2) SGD_ERROR("Material parameter \"" + name + "\" is not of type 'vec4f");
+
+	m_uniformBuffer->update(&value, it->second.offset, sizeof(value));
+}
+
+void Material::setFloat(CString name, float value) {
 	auto it = m_desc->uniformDescs.find(name);
 	if (it == m_desc->uniformDescs.end()) SGD_ERROR("Material float parameter \"" + name + "\" not found");
-
 	if (it->second.type != 1) SGD_ERROR("Material paramter \"" + name + "\" is not of type 'float'");
 
 	m_uniformBuffer->update(&value, it->second.offset, sizeof(value));
