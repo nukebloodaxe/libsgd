@@ -1,5 +1,7 @@
 ***** v0.18.0 *****
 
+Updated Dawn lib to latest. Had to update MSVC too to fix a missing D3D12 file build error.
+
 Added PBR material vec2f property "textureScale" for dynamically scaling tex coorinates.
 
 Added SetMaterialVec4f, SetMaterialVec3f, SetMaterialVec2f for setting linear vector values.
