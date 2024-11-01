@@ -61,7 +61,7 @@ struct Deserializer {
 			auto items = json["children"].array_items();
 			for (Json& item : items) {
 				auto obj = deserializeObject(item);
-				if(!obj) continue;
+				if (!obj) continue;
 				auto child = obj->as<Entity>();
 				auto matrix = child->worldMatrix();
 				child->setParent(entity);
@@ -161,7 +161,9 @@ struct Deserializer {
 					auto path = Path(item["path"].string_value());
 					auto type = item["type"].string_value();
 					Material* material;
-					if (type == "pbr") {
+					if (toLower(path.ext()) == ".sgd") {
+						material = loadMaterial(path).result();
+					} else if (type == "pbr") {
 						material = loadPBRMaterial(path).result();
 					} else if (type == "prelit") {
 						material = loadEmissiveMaterial(path).result();
@@ -214,7 +216,7 @@ struct Deserializer {
 			auto& items = json["entities"].array_items();
 			for (auto& item : items) {
 				auto root = deserializeObject(item)->as<Entity>();
-				if(!root) continue;
+				if (!root) continue;
 				scene->add(root);
 			}
 		}
@@ -402,7 +404,7 @@ struct Serializer {
 		json["clearColor"] = serialize(scene->sceneRenderer()->clearColor());
 		Json::array entities;
 		for (Entity* entity : scene->entities()) {
-			if(entity->parent()) continue;
+			if (entity->parent()) continue;
 			auto cjson = serializeObject(entity);
 			if (cjson.is_null()) continue;
 			entities.emplace_back(cjson);
@@ -413,7 +415,7 @@ struct Serializer {
 	}
 
 	Json serializeObject(CObject* obj) {
-		if(!obj) return {};
+		if (!obj) return {};
 		if (obj->is<Scene>()) return serializeScene(obj->as<Scene>());
 		if (obj->is<Camera>()) return serializeCamera(obj->as<Camera>());
 		if (obj->is<Light>()) return serializeLight(obj->as<Light>());

@@ -86,6 +86,13 @@ int SGD_DECL sgd_GetTexelSRGBA(SGD_Texture htexture, int x, int y) {
 
 // ***** Material *****
 
+SGD_Material SGD_DECL sgd_LoadMaterial(SGD_String path) {
+	sgdx::started();
+	auto material = sgd::loadMaterial(sgd::Path(path));
+	if(!material) sgdx::error("Failed to load material", material.error());
+	return sgdx::createHandle(material.result());
+}
+
 SGD_Material SGD_DECL sgd_CreatePBRMaterial() {
 	sgdx::started();
 	auto material = sgd::createPBRMaterial();

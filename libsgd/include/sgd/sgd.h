@@ -468,16 +468,19 @@ typedef enum SGD_CullMode {
 //! @defgroup Material Material
 //! @{
 
+//! Load a new material from an '.sgd' material file.
+SGD_API SGD_Material SGD_DECL sgd_LoadMaterial(SGD_String path);
+
 //! Create a new PBR material.
 SGD_API SGD_Material SGD_DECL sgd_CreatePBRMaterial();
 
-//! Load a new PBR material.
+//! Load a new PBR material from an image file.
 SGD_API SGD_Material SGD_DECL sgd_LoadPBRMaterial(SGD_String path);
 
 //! Create a new emissive material.
 SGD_API SGD_Material SGD_DECL sgd_CreateEmissiveMaterial();
 
-//! Load a new emissive material.
+//! Load a new emissive material from an image file.
 SGD_API SGD_Material SGD_DECL sgd_LoadEmissiveMaterial(SGD_String path);
 
 //! Set material blend mode.

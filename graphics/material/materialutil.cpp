@@ -67,7 +67,7 @@ Material* deserializeMaterial(const json11::Json& json, CPath rootPath) {
 			texture = loadArrayTexture(path, format, flags).result();
 			break;
 		default:
-			SGD_LOG << "Material error: invalid type of texture \""+kv.first+"\"";
+			SGD_LOG << "Material error: invalid type of texture \"" + kv.first + "\"";
 			continue;
 		}
 		material->setTexture(kv.first, texture);
@@ -88,26 +88,26 @@ Material* deserializeMaterial(const json11::Json& json, CPath rootPath) {
 }
 
 Material* createMaterial(CString type) {
-	auto desc  = MaterialDescriptor::forTypeName(type);
-	if(!desc) SGD_ERROR("Unknown material type \""+type+"\"");
+	auto desc = MaterialDescriptor::forTypeName(type);
+	if (!desc) SGD_ERROR("Unknown material type \"" + type + "\"");
 
 	return new Material(desc);
 }
 
-Expected<Material*, FileioEx> loadMaterial(CPath path) {
+Expected<Material*, FileioEx> loadMaterial(CPath tpath) {
+	auto path = tpath;
+	if (toLower(path.ext()) != ".sgd") path = path / "material.sgd";
 
-	auto tpath = path;
-	if (toLower(tpath.ext()) != ".sgd") tpath = tpath / "material.sgd";
-
-	auto str = loadString(tpath);
+	auto str = loadString(path);
 	if (!str) return str.error();
 
 	String err;
 	auto json = json11::Json::parse(str.result(), err, json11::JsonParse::COMMENTS);
-	if (json.is_null()) return SGD_PATHEX("JSON error parsing", tpath);
+	if (json.is_null()) return SGD_PATHEX("JSON error parsing", path);
 
-	auto material = deserializeMaterial(json, tpath.parentPath());
+	auto material = deserializeMaterial(json, path.parentPath());
 	if (!material) return SGD_PATHEX("Failed to deserialize material", path);
+	material->path = path;
 
 	return material;
 }
@@ -117,7 +117,6 @@ Material* createPBRMaterial() {
 }
 
 Expected<Material*, FileioEx> loadPBRMaterial(CPath path) {
-
 	auto texture = load2DTexture(path, TextureFormat::any, TextureFlags::default_);
 	if (!texture) return texture.error();
 
