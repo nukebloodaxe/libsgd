@@ -1,14 +1,16 @@
 ## Welcome to LibSGD
 
-LibSGD is a simple game development library that provides a high level, easy to use 'scene graph' style API for writing games and apps.
+Following Mark Sibly's death, this is a forked repository containing minor fixes to get compilation working.  Please compile from the development branch, as Dawn is currently broken in the main branch.
 
-LibSGD also support loading and playing audio and will eventually include network functionality.
+LibSGD is a simple game development library that provides a high-level, easy-to-use 'scene graph' style API for writing games and apps.
+
+LibSGD also supports loading and playing audio and will eventually include network functionality.
 
 The library is coded in C++, but the primary public API is pure 'C', making it highly compatible with a wide range of platforms and languages.
 
 Currently supported languages include C/C++, Blitz3D, BlitzMax, Python and node.js. Support for more languages  is on the way.
 
-Note that Pull Requests are not currently being accepted for this repository.
+Please note that Pull Requests are not currently being accepted for this repository.
 
 LibSGD is licensed under the Zlib/PNG license.
 
@@ -79,11 +81,11 @@ After building and installing, LIBSGD_INSTALL should include an additional blitz
 
 ### Build instructions for the Python target
 
-* Install the python devlopment libraries and SWIG.
+* Install the Python development libraries and SWIG.
 
 * Set the cmake option SGD_PYTHON_TARGET_ENABLED to ON. You can do this by passing -DSGD_PYTHON_TARGET_ENABLED=ON to cmake when configuring.
 
-After building and installing, LIBSGD_INSTALL should include an additional python directory containing the SGD python module.
+After building and installing, LIBSGD_INSTALL should include an additional Python directory containing the SGD Python module.
 
 
 ### Build instructions for the node.js target
@@ -97,8 +99,10 @@ After building and installing, LIBSGD_INSTALL should include an additional nodej
 
 ### Build instructions for html help files
 
+* Ensure you have the following Python modules installed:  sphinx and breathe.
+
 * Install Doxygen.
 
-* Set the cmake option SGD_DOXYGEN_TARGET_ENABLED to ON. You can do this by passing -DSGD_DOXYGEN_TARGET_ENABLED=ON to cmake when configuring.  
+* Set the cmake option SGD_DOCS_TARGET_ENABLED to ON. You can do this by passing -DSGD_DOCS_TARGET_ENABLED=ON to cmake when configuring.  
 
 After building and installing, LIBSGD_INSTALL should include an additional html directory containing the SGD html help files.
