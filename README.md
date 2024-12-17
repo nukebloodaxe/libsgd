@@ -1,6 +1,7 @@
 ## Welcome to LibSGD
 
 Following Mark Sibly's death, this is a forked repository containing minor fixes to get compilation working.  Please compile from the development branch, as Dawn is currently broken in the main branch.
+Please also note the extra sections added to this repository, such as the project [basically what needs to be done], discussions [please start here], and wiki areas.  [The Wiki is very empty right now]
 
 LibSGD is a simple game development library that provides a high-level, easy-to-use 'scene graph' style API for writing games and apps.
 
