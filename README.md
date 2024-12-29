@@ -4,6 +4,10 @@ Following Mark Sibly's death, this is a forked repository containing minor fixes
 
 Please also note the extra sections added to this repository, such as the project [basically what needs to be done], discussions [please start here], and wiki areas.  [The Wiki is very empty right now]
 
+Discussion is occurring regarding the library on Discord: https://discord.gg/f9g34x4u
+
+MPzCodes has a compiled version of the 0.18 version of LibSGD with blitz3D available in the following repository for testing: https://github.com/MPzCodes/Blitz3D-with-libsgd
+
 LibSGD is a simple game development library that provides a high-level, easy-to-use 'scene graph' style API for writing games and apps.
 
 LibSGD also supports loading and playing audio and will eventually include network functionality.
@@ -15,8 +19,6 @@ Currently supported languages include C/C++, Blitz3D, BlitzMax, Python and node.
 Please note that Pull Requests are not currently being accepted for this repository.
 
 LibSGD is licensed under the Zlib/PNG license.
-
-Discussion is occurring regarding the library on Discord: https://discord.gg/f9g34x4u
 
 Join the LibSFD discussion at https://skirmish-dev.net/forum [Currently Offline]
 
