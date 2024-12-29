@@ -4,6 +4,8 @@ Following Mark Sibly's death, this is a forked repository containing minor fixes
 
 Discussion is occurring regarding the library on Discord: https://discord.gg/f9g34x4u
 
+MPzCodes has a compiled version of the 0.18 version of LibSGD with blitz3D available in the following repository for testing: https://github.com/MPzCodes/Blitz3D-with-libsgd
+
 LibSGD is a simple game development library that provides a high-level, easy-to-use 'scene graph' style API for writing games and apps.
 
 LibSGD also supports loading and playing audio and will eventually include network functionality.
