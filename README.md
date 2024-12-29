@@ -2,6 +2,8 @@
 
 Following Mark Sibly's death, this is a forked repository containing minor fixes to get compilation working.  Please compile from the development branch, as Dawn is currently broken in the main branch.
 
+Discussion is occurring regarding the library on Discord: https://discord.gg/f9g34x4u
+
 LibSGD is a simple game development library that provides a high-level, easy-to-use 'scene graph' style API for writing games and apps.
 
 LibSGD also supports loading and playing audio and will eventually include network functionality.
@@ -14,7 +16,7 @@ Please note that Pull Requests are not currently being accepted for this reposit
 
 LibSGD is licensed under the Zlib/PNG license.
 
-Joins the LibSFD discussion at https://skirmish-dev.net/forum
+Join the LibSFD discussion at https://skirmish-dev.net/forum [Currently Down]
 
 Help support LibSGD at https://patreon.com/libsgd
 
