@@ -16,7 +16,9 @@ Please note that Pull Requests are not currently being accepted for this reposit
 
 LibSGD is licensed under the Zlib/PNG license.
 
-Joins the LibSFD discussion at https://skirmish-dev.net/forum
+Discussion is occurring regarding the library on Discord: https://discord.gg/f9g34x4u
+
+Join the LibSFD discussion at https://skirmish-dev.net/forum [Currently Offline]
 
 Help support LibSGD at https://patreon.com/libsgd
 
